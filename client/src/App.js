@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div className="App">
-      <Home connect={connect} />
+      <Home connect={connect} tbtc={tbtc} />
       <div onClick={testTbtc}>Test</div>
     </div>
   );

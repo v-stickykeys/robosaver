@@ -25,6 +25,12 @@ export const connectProvider = async () => {
         ethereum.emit("update");
         return true;
       });
+
+    if (connected) {
+      const [defaultAccount] = await web3.eth.getAccounts();
+      web3.eth.defaultAccount = defaultAccount;
+    }
+
     return connected;
   } else {
     console.error('Unsupported network');

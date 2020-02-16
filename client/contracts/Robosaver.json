@@ -9,7 +9,13 @@
 			}
 		],
 		"name": "createContract",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"

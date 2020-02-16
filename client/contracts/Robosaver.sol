@@ -16,13 +16,23 @@ contract CEth {
 
 }
 
+contract Uniswaping {
+    address payable exchange = 0x242E084657F5cdcF745C03684aAeC6E9b0bB85C5;
+    address payable tbtcErc20Address = 0x083f652051b9CdBf65735f98d83cc329725Aa957;
+    
+    function approveUni() public{
+        
+    }
+}
+
 contract RobosaverFactory {
     mapping(address => address) public userContractMapping;
 
-    function createContract(address payable owner) public {
+    function createContract(address payable owner) public returns (address){
         require(userContractMapping[owner] == address(0x0));
         Robosaver newRobosaver = new Robosaver(owner);
         userContractMapping[owner] = address(newRobosaver);
+        return address(newRobosaver);
     }
     
     function returnMappingValue(address _owner) public view returns (address) {

@@ -2,12 +2,13 @@ import BigNumber from 'bignumber.js';
 
 import { web3 } from './index';
 
-import RobosaverMetaContractAbi from './contracts/Robosaver.json';
+import RobosaverFactoryAbi from './contracts/RobosaverFactory.json';
+import RobosaverAbi from './contracts/Robosaver.json';
 import ERC20Abi from './contracts/ERC20.json';
 
-const RobosaverMetaContractAddress = '0xCf9B7F518AD918820f6894e47928c72a9F861D75';
+const RobosaverMetaContractAddress = '0x51c4BC5A7A89EEa3D4e0d1821237612Dc75581D4';
 export const RobosaverMetaContract = new web3.eth.Contract(
-  RobosaverMetaContractAbi,
+  RobosaverFactoryAbi,
   RobosaverMetaContractAddress
 );
 

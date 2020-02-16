@@ -13,7 +13,7 @@ const styles = {
 
 function Home(props) {
 
-  const { connect, tbtc, cTokens } = props;
+  const { connect, tbtc, cTokens, tBtcRate } = props;
 
   const [displayBitcoinModal, setDisplayBitcoinModal] = useState(false);
   const [bitcoinAddress, setBitcoinAddress] = useState('');
@@ -43,14 +43,6 @@ function Home(props) {
     setLoading(false);
   }
 
-  function getTBtcRate() {
-    if (cTokens) {
-      console.log(cTokens);
-    const ctBtcToken = cTokens['cToken'].filter((token) => { return token['underlying_symbol'] === 'TBTC'; });
-    return (ctBtcToken.length > 0) && ctBtcToken['supply_rate']['value'];
-    }
-  }
-
   return (
     <div style={styles.container} className="Home">
       <Modal
@@ -60,7 +52,8 @@ function Home(props) {
         bitcoinAddress={bitcoinAddress}
         displayBitcoinModal={displayBitcoinModal}
         displayDashboard={displayDashboard}
-        tBtcRate={getTBtcRate()}
+        tBtcRate={tBtcRate}
+        cTokens={cTokens}
       />
       <Deposit
         startFlow={startFlow}

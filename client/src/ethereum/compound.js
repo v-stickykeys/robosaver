@@ -27,3 +27,17 @@ export const getCTokenDetails = async () => {
     });
   return cTokens;
 }
+
+export function getHighestInterestRate(cTokens) {
+  cTokens = cTokens.map((token) => {
+    return token['supply_rate']['value'];
+  });
+
+  const highest = cTokens['cToken'].reduce((a, b) => {
+    const aRate = a['supply_rate']['value'];
+    const bRate = b['supply_rate']['value'];
+    return Math.max(aRate, bRate);
+  });
+
+  return highest[0];
+}

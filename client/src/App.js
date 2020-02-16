@@ -9,7 +9,7 @@ import logo from './logo.svg';
 import { colors } from './lib';
 import 'antd/dist/antd.css';
 import './App.css';
-import { getCTokenDetails } from './ethereum/compound';
+import { getCTokenDetails, getTbtcRate } from './ethereum/compound';
 
 const styles = {
   header: {
@@ -27,6 +27,7 @@ const styles = {
 function App() {
   const [connected, setConnected] = useState(false);
   const [tbtc, setTbtc] = useState(null);
+  const [tBtcRate, setTBtcRate] = useState(null);
   const [cTokens, setCTokens] = useState(null);
 
   useEffect(() => {
@@ -40,8 +41,10 @@ function App() {
   }, [])
 
   async function getRates() {
-    const ctokens = await getCTokenDetails();
-    setCTokens(ctokens);
+    const cTokenDetails = await getCTokenDetails();
+    setCTokens(cTokenDetails);
+    const rate = await getTbtcRate();
+    setTBtcRate(rate);
   }
 
   async function connectTbtc() {
@@ -68,7 +71,7 @@ function App() {
       <div style={styles.header}>
         <img src={logo} />
       </div>
-      <Home connect={connect} tbtc={tbtc} cTokens={cTokens} />
+      <Home connect={connect} tbtc={tbtc} cTokens={cTokens} tBtcRate={tBtcRate} />
       {/* <div onClick={testTbtc}>Test</div> */}
     </div>
   );

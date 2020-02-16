@@ -1,7 +1,8 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { Button, Card, Icon, Input, Select, Spin, Typography } from 'antd';
 
 import { getAmount, deposit as robosaverDeposit, checkAccountExists, createAccount } from '../ethereum/robosaver';
+import { getHighestInterestRate } from '../ethereum/compound';
 
 import Deposit from '../components/Deposit';
 
@@ -62,12 +63,21 @@ const styles = {
 };
 
 function Modal(props) {
-  const { startFlow, bitcoinAddress, displayBitcoinModal, loading } = props;
+  const { cTokens, startFlow, bitcoinAddress, displayBitcoinModal, loading, tBtcRate } = props;
 
   const [bestRateLogo, setBestRateLogo] = useState(null);
   const [bestRateText, setBestRateText] = useState(null);
   const [depositAmount, setDepositAmount] = useState(0);
   const [calculatedEarnings, setCalculatedEarnings] = useState(null);
+
+  useEffect(() => {
+    if (cTokens) {
+    if (cTokens.length >  0) {
+      const rate = getHighestInterestRate(cTokens);
+      setBestRateText(rate);
+    }
+    }
+  }, [cTokens]);
 
   function renderText(text) {
     return (
@@ -141,8 +151,13 @@ function Modal(props) {
     );
   }
 
-  function handleAmountInput(amt) {
+  function handleAmountInput(e) {
+    const amt = e.target.value;
     setDepositAmount(amt);
+    console.log(tBtcRate);
+    console.log(amt);
+    const earnings = parseFloat(tBtcRate) * parseInt(amt);
+    setCalculatedEarnings(earnings);
   }
 
   function renderMain() {

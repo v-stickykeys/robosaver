@@ -1,9 +1,20 @@
 import React from 'react';
+import Modal from '../components/Modal';
+
+import { colors } from '../lib';
+
+const styles = {
+  container: {
+    backgroundColor: colors.background,
+  }
+};
 
 function Home(props) {
+  const { tbtc } = props;
   return (
-    <div className="Home">
+    <div style={styles.container} className="Home">
       <div onClick={props.connect}>Connect</div>
+      <Modal {...props} />
     </div>
   );
 }

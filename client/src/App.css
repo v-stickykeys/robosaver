@@ -3,6 +3,10 @@
   background-color: #203b58;
 }
 
+body {
+  background-color: #203b58;
+}
+
 .ant-input {
   border-radius: 3px !important;
   border: solid 0.9px #54789C !important;

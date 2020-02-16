@@ -6,11 +6,12 @@ import { colors } from '../lib';
 const styles = {
   container: {
     backgroundColor: colors.background,
+    height: '100vh',
   }
 };
 
 function Home(props) {
-  const { tbtc } = props;
+  const { connect, tbtc } = props;
   return (
     <div style={styles.container} className="Home">
       <div onClick={props.connect}>Connect</div>

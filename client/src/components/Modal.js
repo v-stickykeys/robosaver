@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Button, Card, Input, Select, Typography } from 'antd';
 
 import Deposit from '../components/Deposit';
@@ -48,19 +48,17 @@ const styles = {
   coinPrice: {
     textAlign: 'left',
   },
-  depositButton: {
-    backgroundColor: colors.green,
-    width: 160,
-    margin: 'auto',
-  }
 };
 
 function Modal(props) {
-  const { tbtc } = props;
+  const { connect, tbtc } = props;
 
   const [bestRateLogo, setBestRateLogo] = useState(null);
   const [bestRateText, setBestRateText] = useState(null);
   const [calculatedEarnings, setCalculatedEarnings] = useState(null);
+  const [displayBitcoinModal, setDisplayBitcoinModal] = useState(false);
+  const [depositMethod, setDepositMethod] = useState(0); // 0 initiate // 1 complete
+  const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   function renderText(text) {
     return (
@@ -89,19 +87,32 @@ function Modal(props) {
     return <div style={styles.coinPrice}>Current {text} price: {BtcPrice} {BtcPercent}</div>;
   }
 
-  return (
-    <div style={styles.container} className="Modal">
-      <Title style={styles.title} level={3}>Calculate your potential profit</Title>
-      <div>
-        {renderText('Select a wallet')}
+  function updateModal(address) {
+    setBitcoinAddress(address);
+    setDisplayBitcoinModal(true);
+  }
+
+  function renderBitcoinModal() {
+    return(
+      <Fragment>
+        <Title style={styles.title} level={3}>Send BTC to this address</Title>
+        <div>
+        {renderText('Bitcoin wallet address')}
         <Input
           className='modalInput'
           style={styles.input}
-          prefix={<img src={metamaskLogo} style={styles.prefix} />}
-          placeholder={'MetaMask'}
-        />
-      </div>
-      <div>
+          placeholder={bitcoinAddress}
+          suffix={'copy'}
+        /></div>
+        {renderBottomFields()}
+      </Fragment>
+    )
+  }
+
+  function renderBottomFields() {
+    return (
+      <Fragment>
+        <div>
         {renderText('How much would you like to deposit?')}
         <Input
           className='modalInput'
@@ -127,12 +138,34 @@ function Modal(props) {
           suffix={renderCoinText('BTC')}
         />
         {renderCoinPrice('BTC')}
+      </div></Fragment>
+    );
+  }
+
+  return (
+    <div style={styles.container} className="Modal">
+      {!displayBitcoinModal && (
+        <Fragment>
+      <Title style={styles.title} level={3}>Calculate your potential profit</Title>
+      <div>
+        {renderText('Select a wallet')}
+        <Input
+          className='modalInput'
+          style={styles.input}
+          prefix={<img src={metamaskLogo} style={styles.prefix} />}
+          placeholder={'MetaMask'}
+        />
       </div>
-      <Button style={styles.depositButton} type="primary" size={'large'}>
-        DEPOSIT
-      </Button>
-      <div onClick={props.connect}>Connect</div>
-      <Deposit tbtc={tbtc} />
+      {renderBottomFields()}
+      </Fragment>
+      )}
+      {displayBitcoinModal && renderBitcoinModal()}
+      <Deposit
+        connect={connect}
+        tbtc={tbtc}
+        displayBitcoinModal={(address) => updateModal(address)}
+        method={depositMethod}
+      />
     </div>
   );
 }

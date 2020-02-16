@@ -65,7 +65,7 @@ function App() {
         <img src={logo} />
       </div>
       <Home connect={connect} tbtc={tbtc} />
-      <div onClick={testTbtc}>Test</div>
+      {/* <div onClick={testTbtc}>Test</div> */}
     </div>
   );
 }

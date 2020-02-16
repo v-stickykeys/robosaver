@@ -9,6 +9,7 @@ contract Erc20 {
 
 contract CErc20 {
     function mint(uint) external returns (uint);
+    function redeem(uint redeemTokens) public returns (uint);
 }
 
 contract CEth {
@@ -44,7 +45,7 @@ contract Uniswaping {
         underlying.approve(exchange, currentTbtcBalance);
 
         UniswapExchangeInterface uniswap = UniswapExchangeInterface(exchange);
-        return uniswap.addLiquidity(1, currentTbtcBalance, 1584337723);
+        //return uniswap.addLiquidity(1, 1584337723).value(balanceOf(address(this)).gas(250000)();
     }
 }
 
@@ -67,15 +68,14 @@ contract Robosaver {
     //Compound addresses for Ropsten
     address payable ctbtcAddress = 0xB40d042a65Dd413Ae0fd85bECF8D722e16bC46F1;
     address payable tbtcErc20Address = 0x083f652051b9CdBf65735f98d83cc329725Aa957;
-    address payable cethAddress = 0x1d70B01A2C3e3B2e56FcdcEfe50d5c5d70109a5D;
-    
+
     address payable public owner;
     
     constructor (address payable _owner) public payable{
         owner = _owner;
     }
     function supplyEthToCompound() public payable returns (bool) {
-        CEth(cethAddress).mint.value(msg.value).gas(250000)();
+        CEth(ctbtcAddress).mint.value(msg.value).gas(250000)();
         return true;
     }
     
@@ -88,8 +88,8 @@ contract Robosaver {
     }
   
     function withdrawAllFromCompound() public returns (uint){
-        Erc20 underlying = Erc20(tbtcErc20Address);
-        return CEth(ctbtcAddress).redeem(underlying.balanceOf(address(this)));
+        Erc20 underlying = Erc20(ctbtcAddress);
+        return CErc20(ctbtcAddress).redeem(underlying.balanceOf(address(this)));
     }
     
     function moveAllTbtcToCompound() public returns (uint) {

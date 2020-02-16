@@ -1,4 +1,5 @@
 pragma solidity ^0.5.12;
+import "./UniswapExchangeInterface.sol";
 
 contract Erc20 {
     function approve(address, uint) external returns (bool);
@@ -16,12 +17,34 @@ contract CEth {
 
 }
 
+
+
 contract Uniswaping {
     address payable exchange = 0x242E084657F5cdcF745C03684aAeC6E9b0bB85C5;
     address payable tbtcErc20Address = 0x083f652051b9CdBf65735f98d83cc329725Aa957;
     
-    function approveUni() public{
-        
+    function approve(address _spender, uint256 _value) external returns (bool);
+
+    function approveUni() public returns (bool){
+        UniswapExchangeInterface uniswap = UniswapExchangeInterface(exchange);
+        return uniswap.approve(address(this), 100000000000000000000);
+    }
+    //add liquidity
+    function SwapTbtcToEth() public returns (uint256) {
+        Erc20 underlying = Erc20(tbtcErc20Address);
+        uint currentTbtcBalance = underlying.balanceOf(address(this));
+
+        UniswapExchangeInterface uniswap = UniswapExchangeInterface(exchange);
+        return uniswap.addLiquidity(1, currentTbtcBalance, 1584337723);
+    }
+    //swap
+    function SwapEthtoTbtc() public returns (uint256) {
+        Erc20 underlying = Erc20(tbtcErc20Address);
+        uint currentTbtcBalance = underlying.balanceOf(address(this));
+        underlying.approve(exchange, currentTbtcBalance);
+
+        UniswapExchangeInterface uniswap = UniswapExchangeInterface(exchange);
+        return uniswap.addLiquidity(1, currentTbtcBalance, 1584337723);
     }
 }
 
@@ -80,11 +103,13 @@ contract Robosaver {
     
     function transferOut(address _usersAddress, uint _amount) public payable returns(bool) {
         Erc20 underlying = Erc20(tbtcErc20Address);
+        underlying.approve(_usersAddress, _amount);
         return underlying.transfer(_usersAddress, _amount);
     }
     
     function transferAllOut(address _usersAddress) public payable returns(bool) {
         Erc20 underlying = Erc20(tbtcErc20Address);
+        underlying.approve(_usersAddress, underlying.balanceOf(address(this)));
         return underlying.transfer(_usersAddress, underlying.balanceOf(address(this)));
     }
   

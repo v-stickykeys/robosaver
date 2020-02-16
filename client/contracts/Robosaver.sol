@@ -20,6 +20,7 @@ contract RobosaverFactory {
     mapping(address => address) public userContractMapping;
 
     function createContract(address payable owner) public {
+        require(userContractMapping[owner] == address(0x0));
         Robosaver newRobosaver = new Robosaver(owner);
         userContractMapping[owner] = address(newRobosaver);
     }

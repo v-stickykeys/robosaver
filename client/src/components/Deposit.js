@@ -54,7 +54,6 @@ function Deposit(props) {
     if (accountAddress === '') {
       accountAddress = await createAccount();
     }
-    console.log('accountAddress', accountAddress);
     await robosaverDeposit('TBTC', accountAddress, amount);
   }
 

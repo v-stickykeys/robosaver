@@ -173,9 +173,10 @@ function Modal(props) {
   }
 
   async function testSendTBTC() {
-    const amount = getAmount;
-    console.log(amount);
+    const amount = getAmount();
+    console.log('amount', amount);
     let accountAddress = await checkAccountExists();
+    console.log('accountAddress', accountAddress);
     if (accountAddress === '') {
       accountAddress = await createAccount();
     }

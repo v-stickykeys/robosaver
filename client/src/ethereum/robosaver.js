@@ -54,7 +54,7 @@ export const deposit = async (assetTicker, accountAddress, amount) => {
     .on('transactionHash', handleTxHash)
     .catch(handleTxError);
   
-  success = await Contract.methods.moveAllTbtc()
+  success = await Contract.methods.moveAllTbtcToCompound()
     .send({ from })
     .on('transactoinHash', handleTxHash)
     .catch(handleTxError);

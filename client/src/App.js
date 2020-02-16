@@ -9,6 +9,7 @@ import logo from './logo.svg';
 import { colors } from './lib';
 import 'antd/dist/antd.css';
 import './App.css';
+import { getCTokenDetails } from './ethereum/compound';
 
 const styles = {
   header: {
@@ -26,12 +27,22 @@ const styles = {
 function App() {
   const [connected, setConnected] = useState(false);
   const [tbtc, setTbtc] = useState(null);
+  const [cTokens, setCTokens] = useState(null);
 
   useEffect(() => {
     if (connected === true) {
       connectTbtc();
     }
   }, [connected]);
+
+  useEffect(() => {
+    getRates();
+  }, [])
+
+  async function getRates() {
+    const ctokens = await getCTokenDetails();
+    setCTokens(ctokens);
+  }
 
   async function connectTbtc() {
     const tbtcConfigured = await configureTbtc(web3);
@@ -57,7 +68,7 @@ function App() {
       <div style={styles.header}>
         <img src={logo} />
       </div>
-      <Home connect={connect} tbtc={tbtc} />
+      <Home connect={connect} tbtc={tbtc} cTokens={cTokens} />
       {/* <div onClick={testTbtc}>Test</div> */}
     </div>
   );

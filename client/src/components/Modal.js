@@ -38,6 +38,7 @@ const styles = {
     color: 'white',
   },
   input: {
+    color: 'white',
     margin: 'auto',
     height: '52px',
     borderRadius: '3px',
@@ -54,7 +55,10 @@ const styles = {
     backgroundColor: colors.green,
     width: 160,
     margin: 'auto',
-  }
+  },
+  copyIcon: {
+    color: 'white',
+  },
 };
 
 function Modal(props) {
@@ -62,6 +66,7 @@ function Modal(props) {
 
   const [bestRateLogo, setBestRateLogo] = useState(null);
   const [bestRateText, setBestRateText] = useState(null);
+  const [depositAmount, setDepositAmount] = useState(0);
   const [calculatedEarnings, setCalculatedEarnings] = useState(null);
 
   function renderText(text) {
@@ -93,7 +98,7 @@ function Modal(props) {
           className='modalInput'
           style={styles.input}
           value={bitcoinAddress}
-          suffix={<Icon type="copy" />}
+          suffix={<Icon style={styles.copyIcon} type="copy" />}
         /></div>
         {renderBottomFields()}
       </Fragment>
@@ -108,6 +113,8 @@ function Modal(props) {
         <Input
           className='modalInput'
           style={styles.input}
+          onChange={handleAmountInput}
+          placeholder={0}
           suffix={renderCoinText('BTC')}
         />
       </div>
@@ -132,6 +139,10 @@ function Modal(props) {
       </div>
       </Fragment>
     );
+  }
+
+  function handleAmountInput(amt) {
+    setDepositAmount(amt);
   }
 
   function renderMain() {

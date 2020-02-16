@@ -54,13 +54,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <PageHeader
-        style={{
-          border: '1px solid rgb(235, 237, 240)',
-        }}
-        title={<img src={logo} />}
-        subTitle="This is a subtitle"
-      /> */}
       <div style={styles.header}>
         <img src={logo} />
       </div>

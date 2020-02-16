@@ -1,21 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import { Button } from 'antd';
-
-import { colors } from '../lib';
-
-const styles = {
-  depositButton: {
-    backgroundColor: colors.green,
-    width: 160,
-    margin: 'auto',
-  }
-};
 
 function Deposit(props) {
-  const { connect, tbtc, displayBitcoinModal } = props;
+  const { startFlow, connect, tbtc, displayBitcoinModal } = props;
 
   const [deposit, setDeposit] = useState(null);
   const [initiated, setInitiated] = useState(false);
+
+  useEffect(() => {
+    if (startFlow) {
+      connect();
+    }
+  }, [startFlow]);
 
   useEffect(() => {
     if ((tbtc !== null) && (!initiated)) {
@@ -23,10 +18,6 @@ function Deposit(props) {
       initiateDeposit();
     }
   }, [tbtc]);
-
-  async function startFlow() {
-    await connect();
-  }
 
   async function initiateDeposit() {
 
@@ -55,16 +46,7 @@ function Deposit(props) {
   }
 
   return (
-    <div className="Deposit">
-      <Button
-        style={styles.depositButton}
-        type="primary"
-        size={'large'}
-        onClick={startFlow}
-      >
-        DEPOSIT
-      </Button>
-    </div>
+    <div className="Deposit"></div>
   );
 }
 

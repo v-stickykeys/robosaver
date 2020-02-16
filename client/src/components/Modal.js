@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { Button, Card, Input, Select, Typography } from 'antd';
+import { Button, Card, Input, Select, Spin, Typography } from 'antd';
 
 import Deposit from '../components/Deposit';
 
@@ -48,17 +48,19 @@ const styles = {
   coinPrice: {
     textAlign: 'left',
   },
+  depositButton: {
+    backgroundColor: colors.green,
+    width: 160,
+    margin: 'auto',
+  }
 };
 
 function Modal(props) {
-  const { connect, tbtc } = props;
+  const { startFlow, bitcoinAddress, displayBitcoinModal, loading } = props;
 
   const [bestRateLogo, setBestRateLogo] = useState(null);
   const [bestRateText, setBestRateText] = useState(null);
   const [calculatedEarnings, setCalculatedEarnings] = useState(null);
-  const [displayBitcoinModal, setDisplayBitcoinModal] = useState(false);
-  const [depositMethod, setDepositMethod] = useState(0); // 0 initiate // 1 complete
-  const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   function renderText(text) {
     return (
@@ -66,14 +68,6 @@ function Modal(props) {
         <Text style={styles.label}>{text}</Text>
       </div>
     );
-  }
-
-  function renderCard(children) {
-    return (
-      <Card style={styles.input}>
-        {children}
-      </Card>
-    )
   }
 
   function renderCoinText(text) {
@@ -85,11 +79,6 @@ function Modal(props) {
 
   function renderCoinPrice(text) {
     return <div style={styles.coinPrice}>Current {text} price: {BtcPrice} {BtcPercent}</div>;
-  }
-
-  function updateModal(address) {
-    setBitcoinAddress(address);
-    setDisplayBitcoinModal(true);
   }
 
   function renderBitcoinModal() {
@@ -138,14 +127,14 @@ function Modal(props) {
           suffix={renderCoinText('BTC')}
         />
         {renderCoinPrice('BTC')}
-      </div></Fragment>
+      </div>
+      </Fragment>
     );
   }
 
-  return (
-    <div style={styles.container} className="Modal">
-      {!displayBitcoinModal && (
-        <Fragment>
+  function renderMain() {
+    return (
+    <Fragment>
       <Title style={styles.title} level={3}>Calculate your potential profit</Title>
       <div>
         {renderText('Select a wallet')}
@@ -157,15 +146,35 @@ function Modal(props) {
         />
       </div>
       {renderBottomFields()}
+      <Button
+        style={styles.depositButton}
+        type="primary"
+        size={'large'}
+        onClick={startFlow}
+      >
+        DEPOSIT
+      </Button>
       </Fragment>
-      )}
-      {displayBitcoinModal && renderBitcoinModal()}
-      <Deposit
-        connect={connect}
-        tbtc={tbtc}
-        displayBitcoinModal={(address) => updateModal(address)}
-        method={depositMethod}
-      />
+    )
+  }
+
+  function renderLoading() {
+    return (
+      <div>
+        This process may take a few minutes.
+        Please confirm your request on MetaMask.
+        <div>
+          <Spin />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={styles.container} className="Modal">
+      {loading && renderLoading()}
+      {!displayBitcoinModal && !loading && renderMain()}
+      {displayBitcoinModal && !loading && renderBitcoinModal()}
     </div>
   );
 }

@@ -99,6 +99,18 @@ const getAccountAssetBalance = async (networkId, userAddr, assetAddr, opt) => {
   }
 }
 
+export const getCTokenDetails = async () => {
+  let url = "https://api.compound.finance/api/v2/ctoken";
+  const ctokens = await axios.get(url)
+    .catch((err) => {
+      console.error(err);
+    })
+    .then((resp) => {
+      return resp && resp.data;
+    });
+  return ctokens;
+}
+
 export const getLendBalance = async (networkId, userAddr, assetAddr) => {
   return await getAccountAssetBalance(networkId, userAddr, assetAddr, "lend");
 }

@@ -1,5 +1,7 @@
 import React, { useState, Fragment } from 'react';
-import { Button, Card, Input, Select, Spin, Typography } from 'antd';
+import { Button, Card, Icon, Input, Select, Spin, Typography } from 'antd';
+
+import { getAmount, deposit as robosaverDeposit, checkAccountExists, createAccount } from '../ethereum/robosaver';
 
 import Deposit from '../components/Deposit';
 
@@ -90,8 +92,8 @@ function Modal(props) {
         <Input
           className='modalInput'
           style={styles.input}
-          placeholder={bitcoinAddress}
-          suffix={'copy'}
+          value={bitcoinAddress}
+          suffix={<Icon type="copy" />}
         /></div>
         {renderBottomFields()}
       </Fragment>
@@ -170,11 +172,22 @@ function Modal(props) {
     )
   }
 
+  async function testSendTBTC() {
+    const amount = getAmount;
+    console.log(amount);
+    let accountAddress = await checkAccountExists();
+    if (accountAddress === '') {
+      accountAddress = await createAccount();
+    }
+    await robosaverDeposit('TBTC', accountAddress, amount);
+  }
+
   return (
     <div style={styles.container} className="Modal">
       {loading && renderLoading()}
       {!displayBitcoinModal && !loading && renderMain()}
       {displayBitcoinModal && !loading && renderBitcoinModal()}
+      <div onClick={testSendTBTC}> Test Send TBTC </div>
     </div>
   );
 }

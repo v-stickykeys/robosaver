@@ -20,6 +20,7 @@ function Home(props) {
   const [startFlow, setStartFlow] = useState(false);
   const [depositMethod, setDepositMethod] = useState(0); // 0 initiate // 1 complete
   const [loading, setLoading] = useState(false);
+  const [displayDashboard, setDisplayDashboard] = useState(false);
 
   function updateModal(address) {
     setBitcoinAddress(address);
@@ -32,6 +33,16 @@ function Home(props) {
     setStartFlow(true);
   }
 
+  function triggerShowLoader() {
+    setLoading(true);
+  }
+
+  function completeDepositFlow() {
+    setDisplayDashboard(true);
+    setDisplayBitcoinModal(false);
+    setLoading(false);
+  }
+
   return (
     <div style={styles.container} className="Home">
       <Modal
@@ -40,6 +51,7 @@ function Home(props) {
         startFlow={triggerStartFlow}
         bitcoinAddress={bitcoinAddress}
         displayBitcoinModal={displayBitcoinModal}
+        displayDashboard={displayDashboard}
       />
       <Deposit
         startFlow={startFlow}
@@ -47,6 +59,8 @@ function Home(props) {
         tbtc={tbtc}
         displayBitcoinModal={(address) => updateModal(address)}
         method={depositMethod}
+        showLoader={triggerShowLoader}
+        complete={completeDepositFlow}
       />
     </div>
   );

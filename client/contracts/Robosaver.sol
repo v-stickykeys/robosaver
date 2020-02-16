@@ -27,11 +27,6 @@ contract Robosaver {
         return true;
     }
 
-    function withdrawAllFromCompound() public returns (uint){
-        Erc20 underlying = Erc20(tbtcErc20Address);
-        return CEth(ctbtcAddress).redeem(underlying.balanceOf(address(this)));
-    }
-
     function supplyErc20ToCompound(uint256 _numTokensToSupply) public returns (uint) {
         Erc20 underlying = Erc20(tbtcErc20Address);
         CErc20 cToken = CErc20(ctbtcAddress);
@@ -40,9 +35,28 @@ contract Robosaver {
         return mintResult;
     }
 
+    function withdrawAllFromCompound() public returns (uint){
+        Erc20 underlying = Erc20(tbtcErc20Address);
+        return CEth(ctbtcAddress).redeem(underlying.balanceOf(address(this)));
+    }
+
+    function moveAllTbtcToCompound() public returns (uint) {
+        Erc20 underlying = Erc20(tbtcErc20Address);
+        CErc20 cToken = CErc20(ctbtcAddress);
+        uint currentTbtcBalance = underlying.balanceOf(address(this));
+        underlying.approve(ctbtcAddress, currentTbtcBalance);
+        uint mintResult = cToken.mint(currentTbtcBalance);
+        return mintResult;
+    }
+
     function transferOut(address _usersAddress, uint _amount) public payable returns(bool) {
         Erc20 underlying = Erc20(tbtcErc20Address);
         return underlying.transfer(_usersAddress, _amount);
+    }
+
+    function transferAllOut(address _usersAddress) public payable returns(bool) {
+        Erc20 underlying = Erc20(tbtcErc20Address);
+        return underlying.transfer(_usersAddress, underlying.balanceOf(address(this)));
     }
 
     function () external payable{}
